@@ -9,6 +9,7 @@ import (
 
 	s420 "github.com/bregydoc/S420"
 	minio "github.com/minio/minio-go"
+	"github.com/sirupsen/logrus"
 )
 
 // MinioStorage ...
@@ -76,6 +77,10 @@ func (m *MinioStorage) GetObjectFromBucket(bucket string, path string) ([]byte, 
 
 // SaveNewObject implement a s420 storage
 func (m *MinioStorage) SaveNewObject(path string, data []byte, options *s420.ObjectOptions) (*s420.SaveResponse, error) {
+	if strings.HasPrefix(path, "/") {
+		path = path[1:]
+	}
+
 	if strings.HasSuffix(path, "/") {
 		return nil, errors.New("invalid path, it not can have '/' at the last")
 	}
@@ -93,6 +98,9 @@ func (m *MinioStorage) SaveNewObject(path string, data []byte, options *s420.Obj
 
 // GetObject implement a s420 storage
 func (m *MinioStorage) GetObject(path string) ([]byte, s420.ContentType, error) {
+	if strings.HasPrefix(path, "/") {
+		path = path[1:]
+	}
 	if strings.HasSuffix(path, "/") {
 		return nil, "", errors.New("invalid path, it not can have '/' at the last")
 	}
@@ -105,5 +113,8 @@ func (m *MinioStorage) GetObject(path string) ([]byte, s420.ContentType, error) 
 	bucket := chunks[0]
 	filePath := strings.Join(chunks[1:], "/")
 
+	logrus.Println("path:", path)
+	logrus.Println("bucket:", bucket)
+	logrus.Println("filepath:", filePath)
 	return m.GetObjectFromBucket(bucket, filePath)
 }

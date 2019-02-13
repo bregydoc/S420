@@ -2,6 +2,7 @@ package s420
 
 import (
 	"fmt"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -20,7 +21,17 @@ func NewHumanClient(store Storage, r *gin.Engine) *HumanClient {
 
 func (client *HumanClient) Run(addr string) {
 	client.r.GET("/public/*path", func(c *gin.Context) {
-		fmt.Println(c.Param("path"))
+		path := c.Param("path")
+		fmt.Println(path)
+
+		data, cType, err := client.store.GetObject(path)
+		if err != nil {
+			c.String(http.StatusNotFound, err.Error())
+			return
+		}
+
+		c.Data(http.StatusOK, string(cType), data)
+		return
 	})
 
 	client.r.Run(addr)

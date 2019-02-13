@@ -1,4 +1,4 @@
-endpoint: "<Your endpoint here>"
-access_key: "<MINIO ACCESS KEY>"
-secret_access_key: "<MINIO SECRET KEY>"
-use_ssl: true
+endpoint: "play.minio.io:9000"
+access_key: "Q3AM3UQ867SPQQA43P2F"
+secret_access_key: "zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG"
+use_ssl: false
