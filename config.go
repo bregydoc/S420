@@ -11,7 +11,7 @@ import (
 // Config is the struct to config your s420
 type Config struct {
 	Endpoint        string `yaml:"endpoint"`
-	AccessKeyID     string `yaml:"access_key_id"`
+	AccessKey       string `yaml:"access_key"`
 	SecretAccessKey string `yaml:"secret_access_key"`
 	UseSSL          bool   `yaml:"use_ssl"`
 }
@@ -33,8 +33,8 @@ func NewConfigFromFile(filePath string) (*Config, error) {
 		c.Endpoint = os.Getenv(strings.Replace(c.Endpoint, "$", "", -1))
 	}
 
-	if strings.HasPrefix(c.AccessKeyID, "$") {
-		c.AccessKeyID = os.Getenv(strings.Replace(c.AccessKeyID, "$", "", -1))
+	if strings.HasPrefix(c.AccessKey, "$") {
+		c.AccessKey = os.Getenv(strings.Replace(c.AccessKey, "$", "", -1))
 	}
 
 	if strings.HasPrefix(c.SecretAccessKey, "$") {

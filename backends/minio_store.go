@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"strings"
 
 	s420 "github.com/bregydoc/S420"
@@ -19,7 +20,7 @@ type MinioStorage struct {
 
 // NewMinioStore return a minio storage
 func NewMinioStore(c *s420.Config) (*MinioStorage, error) {
-	client, err := minio.New(c.Endpoint, c.AccessKeyID, c.SecretAccessKey, c.UseSSL)
+	client, err := minio.New(c.Endpoint, c.AccessKey, c.SecretAccessKey, c.UseSSL)
 	if err != nil {
 		return nil, err
 	}
@@ -36,7 +37,21 @@ func (m *MinioStorage) SaveObjectInBucket(bucket string, fileName string, data [
 	if strings.HasPrefix(fileName, "/") {
 		fileName = string(fileName[1:])
 	}
-	_, err := m.client.PutObject(bucket,
+
+	location := "us-east-1"
+	err := m.client.MakeBucket(bucket, location)
+	if err != nil {
+		// Check to see if we already own this bucket (which happens if you run this twice)
+		exists, err := m.client.BucketExists(bucket)
+		if err == nil && exists {
+			log.Printf("We already own %s\n", bucket)
+		} else {
+			log.Fatalln(err)
+		}
+	} else {
+		log.Printf("Successfully created %s\n", bucket)
+	}
+	_, err = m.client.PutObject(bucket,
 		fileName,
 		buf,
 		int64(buf.Len()),
@@ -116,5 +131,6 @@ func (m *MinioStorage) GetObject(path string) ([]byte, s420.ContentType, error) 
 	logrus.Println("path:", path)
 	logrus.Println("bucket:", bucket)
 	logrus.Println("filepath:", filePath)
+
 	return m.GetObjectFromBucket(bucket, filePath)
 }

@@ -4,6 +4,7 @@ import (
 	s420 "github.com/bregydoc/S420"
 	"github.com/bregydoc/S420/backends"
 	"github.com/gin-gonic/gin"
+	"github.com/k0kubun/pp"
 )
 
 func main() {
@@ -13,11 +14,14 @@ func main() {
 		panic(err)
 	}
 
+	pp.Println(conf)
+
 	mStore, err := backends.NewMinioStore(conf)
 	if err != nil {
 		panic(err)
 	}
 
 	h := s420.NewHumanClient(mStore, r)
+
 	h.Run(":3300")
 }
