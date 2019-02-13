@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package s420;
+
+option go_package = "s420con";
+
+service S420 {
+    rpc SaveObjectInBucket(NewObjectInBucket) returns (SaveResponse) {}
+    rpc GetObjectFromBucket(ObjectFromBucket) returns (GetResponse) {}
+    rpc SaveNewObject(NewObjectParams) returns (SaveResponse) {}
+    rpc GetObject(ObjectPath) returns (GetResponse) {}
+}
+
+message NewObjectInBucket {
+    string bucket = 1;
+    string fileName = 2;
+    bytes data = 3;
+    ObjectOptions options = 4;
+}
+
+message NewObjectParams {
+    string path = 1;
+    bytes data = 2;
+    ObjectOptions options = 3;
+}
+
+message ObjectFromBucket {
+    string bucket = 1;
+    string path = 2;
+}
+
+message ObjectPath {
+    string path = 1;
+}
+
+message ObjectOptions {
+    string contentType = 1;
+}
+
+message SaveResponse {
+	bool ok = 1;
+	string filePath = 2;
+}
+
+message GetResponse {
+    bytes data = 1;
+    string contentType = 2;
+}

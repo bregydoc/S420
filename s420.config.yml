@@ -1,0 +1,4 @@
+endpoint: "<Your endpoint here>"
+access_key: "<MINIO ACCESS KEY>"
+secret_access_key: "<MINIO SECRET KEY>"
+use_ssl: true
