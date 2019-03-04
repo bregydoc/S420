@@ -19,7 +19,7 @@ type MinioStorage struct {
 }
 
 // NewMinioStore return a minio storage
-func NewMinioStore(c *s420.Config) (*MinioStorage, error) {
+func NewMinioStore(c s420.Storage) (*MinioStorage, error) {
 	client, err := minio.New(c.Endpoint, c.AccessKey, c.SecretAccessKey, c.UseSSL)
 	if err != nil {
 		return nil, err

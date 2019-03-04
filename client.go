@@ -7,20 +7,25 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// HumanClient describe the public client to get access to storage
 type HumanClient struct {
-	store Storage
-	r     *gin.Engine
+	config Public
+	store  StorageSystem
+	r      *gin.Engine
 }
 
-func NewHumanClient(store Storage, r *gin.Engine) *HumanClient {
+// NewHumanClient returns a new public client
+func NewHumanClient(store StorageSystem, c Public, r *gin.Engine) *HumanClient {
 	return &HumanClient{
-		r:     r,
-		store: store,
+		config: c,
+		r:      r,
+		store:  store,
 	}
 }
 
-func (client *HumanClient) Run(addr string) {
-	client.r.GET("/public/*path", func(c *gin.Context) {
+// Run launch the http instance of the client
+func (client *HumanClient) Run() {
+	client.r.GET("/"+client.config.Prefix+"/*path", func(c *gin.Context) {
 		path := c.Param("path")
 		fmt.Println(path)
 
@@ -34,5 +39,5 @@ func (client *HumanClient) Run(addr string) {
 		return
 	})
 
-	client.r.Run(addr)
+	client.r.Run(fmt.Sprintf(":%d", client.config.Port))
 }

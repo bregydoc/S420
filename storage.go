@@ -14,8 +14,8 @@ type SaveResponse struct {
 // ContentType ...
 type ContentType string
 
-// Storage represent the store struct to dialog with minio or any store type
-type Storage interface {
+// StorageSystem represent the store struct to dialog with minio or any store type
+type StorageSystem interface {
 	SaveObjectInBucket(bucket string, fileName string, data []byte, options *ObjectOptions) (*SaveResponse, error)
 	GetObjectFromBucket(bucket string, path string) ([]byte, ContentType, error) // data, content-type, error
 	SaveNewObject(path string, data []byte, options *ObjectOptions) (*SaveResponse, error)

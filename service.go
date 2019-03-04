@@ -7,7 +7,7 @@ import (
 )
 
 // SaveObjectInBucket implements a s420 server
-func (s *Service) SaveObjectInBucket(c context.Context, params *s420con.NewObjectInBucket) (*s420con.SaveResponse, error) {
+func (s *GrpcService) SaveObjectInBucket(c context.Context, params *s420con.NewObjectInBucket) (*s420con.SaveResponse, error) {
 
 	r, err := s.Store.SaveObjectInBucket(params.Bucket, params.FileName, params.Data, &ObjectOptions{
 		ContentType: params.Options.ContentType,
@@ -24,7 +24,7 @@ func (s *Service) SaveObjectInBucket(c context.Context, params *s420con.NewObjec
 }
 
 // GetObjectFromBucket implements a s420 server
-func (s *Service) GetObjectFromBucket(c context.Context, params *s420con.ObjectFromBucket) (*s420con.GetResponse, error) {
+func (s *GrpcService) GetObjectFromBucket(c context.Context, params *s420con.ObjectFromBucket) (*s420con.GetResponse, error) {
 	data, contentType, err := s.Store.GetObjectFromBucket(params.Bucket, params.Path)
 	if err != nil {
 		return nil, err
@@ -37,7 +37,7 @@ func (s *Service) GetObjectFromBucket(c context.Context, params *s420con.ObjectF
 }
 
 // SaveNewObject implements a s420 server
-func (s *Service) SaveNewObject(c context.Context, params *s420con.NewObjectParams) (*s420con.SaveResponse, error) {
+func (s *GrpcService) SaveNewObject(c context.Context, params *s420con.NewObjectParams) (*s420con.SaveResponse, error) {
 	r, err := s.Store.SaveNewObject(params.Path, params.Data, &ObjectOptions{
 		ContentType: params.Options.ContentType,
 	})
@@ -53,7 +53,7 @@ func (s *Service) SaveNewObject(c context.Context, params *s420con.NewObjectPara
 }
 
 // GetObject implements a s420 server
-func (s *Service) GetObject(c context.Context, params *s420con.ObjectPath) (*s420con.GetResponse, error) {
+func (s *GrpcService) GetObject(c context.Context, params *s420con.ObjectPath) (*s420con.GetResponse, error) {
 	data, contentType, err := s.Store.GetObject(params.Path)
 	if err != nil {
 		return nil, err

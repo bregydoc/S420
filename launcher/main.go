@@ -27,14 +27,14 @@ func main() {
 
 	pp.Println(conf)
 
-	mStore, err := backends.NewMinioStore(conf)
+	mStore, err := backends.NewMinioStore(conf.Storage)
 	if err != nil {
 		panic(err)
 	}
 
-	h := s420.NewHumanClient(mStore, r)
+	h := s420.NewHumanClient(mStore, conf.Public, r)
 
-	go func() { h.Run(":3300") }()
+	go func() { h.Run() }()
 
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", *servicePort))
 	if err != nil {
@@ -43,13 +43,13 @@ func main() {
 
 	grpcServer := grpc.NewServer()
 
-	s420con.RegisterS420Server(grpcServer, &s420.Service{
+	s420con.RegisterS420Server(grpcServer, &s420.GrpcService{
 		Store: mStore,
 	})
 
 	log.Printf("[For Developers] GRPC listening on :%d\n", *servicePort)
 	err = grpcServer.Serve(lis)
 	if err != nil {
-		panic(err)
+		log.Println(err)
 	}
 }
