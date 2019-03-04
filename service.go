@@ -7,8 +7,9 @@ import (
 )
 
 // SaveObjectInBucket implements a s420 server
-func (s *S420Service) SaveObjectInBucket(c context.Context, params *s420con.NewObjectInBucket) (*s420con.SaveResponse, error) {
-	r, err := s.store.SaveObjectInBucket(params.Bucket, params.FileName, params.Data, &ObjectOptions{
+func (s *Service) SaveObjectInBucket(c context.Context, params *s420con.NewObjectInBucket) (*s420con.SaveResponse, error) {
+
+	r, err := s.Store.SaveObjectInBucket(params.Bucket, params.FileName, params.Data, &ObjectOptions{
 		ContentType: params.Options.ContentType,
 	})
 
@@ -23,8 +24,8 @@ func (s *S420Service) SaveObjectInBucket(c context.Context, params *s420con.NewO
 }
 
 // GetObjectFromBucket implements a s420 server
-func (s *S420Service) GetObjectFromBucket(c context.Context, params *s420con.ObjectFromBucket) (*s420con.GetResponse, error) {
-	data, contentType, err := s.store.GetObjectFromBucket(params.Bucket, params.Path)
+func (s *Service) GetObjectFromBucket(c context.Context, params *s420con.ObjectFromBucket) (*s420con.GetResponse, error) {
+	data, contentType, err := s.Store.GetObjectFromBucket(params.Bucket, params.Path)
 	if err != nil {
 		return nil, err
 	}
@@ -36,8 +37,8 @@ func (s *S420Service) GetObjectFromBucket(c context.Context, params *s420con.Obj
 }
 
 // SaveNewObject implements a s420 server
-func (s *S420Service) SaveNewObject(c context.Context, params *s420con.NewObjectParams) (*s420con.SaveResponse, error) {
-	r, err := s.store.SaveNewObject(params.Path, params.Data, &ObjectOptions{
+func (s *Service) SaveNewObject(c context.Context, params *s420con.NewObjectParams) (*s420con.SaveResponse, error) {
+	r, err := s.Store.SaveNewObject(params.Path, params.Data, &ObjectOptions{
 		ContentType: params.Options.ContentType,
 	})
 
@@ -52,8 +53,8 @@ func (s *S420Service) SaveNewObject(c context.Context, params *s420con.NewObject
 }
 
 // GetObject implements a s420 server
-func (s *S420Service) GetObject(c context.Context, params *s420con.ObjectPath) (*s420con.GetResponse, error) {
-	data, contentType, err := s.store.GetObject(params.Path)
+func (s *Service) GetObject(c context.Context, params *s420con.ObjectPath) (*s420con.GetResponse, error) {
+	data, contentType, err := s.Store.GetObject(params.Path)
 	if err != nil {
 		return nil, err
 	}
