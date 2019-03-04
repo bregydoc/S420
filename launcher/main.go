@@ -17,7 +17,7 @@ import (
 
 func main() {
 
-	configPath := flag.String("config", "s420.config.yml", "Where your config file is it")
+	configPath := flag.String("config", "/s420.config.yml", "Where your config file is it")
 
 	flag.Parse()
 
