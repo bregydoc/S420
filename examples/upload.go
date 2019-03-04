@@ -38,7 +38,3 @@ func main() {
 
 	pp.Println(resp)
 }
-
-/*
-docker run -p 9000:9000 --name minio1 -v /mnt/data:/data -v /mnt/config:/root/.minio -e "MINIO_ACCESS_KEY=bomboperu" -e "MINIO_SECRET_KEY=1i6sxu6pytfb391fzpl3pltg" minio/minio server /data &
-*/

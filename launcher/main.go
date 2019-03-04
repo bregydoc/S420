@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/bregydoc/S420"
 	"github.com/bregydoc/S420/backends"
-	"github.com/bregydoc/S420/connection"
+	"github.com/bregydoc/S420/proto"
 	"github.com/gin-gonic/gin"
 	"github.com/k0kubun/pp"
 	"github.com/sirupsen/logrus"

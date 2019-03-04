@@ -3,7 +3,7 @@ package s420
 import (
 	"context"
 
-	"github.com/bregydoc/S420/connection"
+	"github.com/bregydoc/S420/proto"
 )
 
 // SaveObjectInBucket implements a s420 server
