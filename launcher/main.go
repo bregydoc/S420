@@ -15,8 +15,9 @@ import (
 )
 
 func main() {
-	servicePort := flag.Int64("port", 24000, "Define the service port")
+
 	configPath := flag.String("config", "s420.config.yml", "Where your config file is it")
+
 	flag.Parse()
 
 	r := gin.Default()
@@ -36,7 +37,7 @@ func main() {
 
 	go func() { h.Run() }()
 
-	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", *servicePort))
+	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", conf.Service.Port))
 	if err != nil {
 		log.Fatal("failed to listen: %v", err)
 	}
@@ -47,7 +48,7 @@ func main() {
 		Store: mStore,
 	})
 
-	log.Printf("[For Developers] GRPC listening on :%d\n", *servicePort)
+	log.Printf("[For Developers] GRPC listening on :%d\n", conf.Service.Port)
 	err = grpcServer.Serve(lis)
 	if err != nil {
 		log.Println(err)
