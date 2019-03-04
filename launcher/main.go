@@ -6,9 +6,9 @@ import (
 	"log"
 	"net"
 
-	s420 "github.com/bregydoc/S420"
+	"github.com/bregydoc/S420"
 	"github.com/bregydoc/S420/backends"
-	s420con "github.com/bregydoc/S420/connection"
+	"github.com/bregydoc/S420/connection"
 	"github.com/gin-gonic/gin"
 	"github.com/k0kubun/pp"
 	"google.golang.org/grpc"

@@ -6,7 +6,7 @@ import (
 
 	"github.com/k0kubun/pp"
 
-	s420con "github.com/bregydoc/S420/connection"
+	"github.com/bregydoc/S420/connection"
 	"google.golang.org/grpc"
 )
 

@@ -8,8 +8,8 @@ import (
 	"log"
 	"strings"
 
-	s420 "github.com/bregydoc/S420"
-	minio "github.com/minio/minio-go"
+	"github.com/bregydoc/S420"
+	"github.com/minio/minio-go"
 	"github.com/sirupsen/logrus"
 )
 
