@@ -3,15 +3,16 @@ package main
 import (
 	"flag"
 	"fmt"
-	"log"
-	"net"
-
 	"github.com/bregydoc/S420"
 	"github.com/bregydoc/S420/backends"
 	"github.com/bregydoc/S420/connection"
 	"github.com/gin-gonic/gin"
 	"github.com/k0kubun/pp"
+	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
+
+	"net"
 )
 
 func main() {
@@ -39,18 +40,30 @@ func main() {
 
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", conf.Service.Port))
 	if err != nil {
-		log.Fatal("failed to listen: %v", err)
+		logrus.Errorf("failed to listen: %v", err)
 	}
 
-	grpcServer := grpc.NewServer()
+	creds, err := credentials.NewServerTLSFromFile(conf.Security.ServerCertPath, conf.Security.ServerKeyPath)
+	if err != nil {
+		logrus.Errorf("could not load TLS keys: %s\n", err)
+	}
+	var grpcServer *grpc.Server
+	if err == nil {
+		// With credentials
+		grpcServer = grpc.NewServer(grpc.Creds(creds))
+		logrus.Infof("Grpc service init with credentials from: %s %s", conf.Security.ServerCertPath, conf.Security.ServerKeyPath)
+	} else {
+		grpcServer = grpc.NewServer()
+		logrus.Info("Grpc service init without credentials")
+	}
 
 	s420con.RegisterS420Server(grpcServer, &s420.GrpcService{
 		Store: mStore,
 	})
 
-	log.Printf("[For Developers] GRPC listening on :%d\n", conf.Service.Port)
+	logrus.Infof("[For Developers] GRPC listening on :%d\n", conf.Service.Port)
 	err = grpcServer.Serve(lis)
 	if err != nil {
-		log.Println(err)
+		logrus.Error(err)
 	}
 }

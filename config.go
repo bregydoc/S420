@@ -7,9 +7,16 @@ import (
 
 // Config is the struct to config your s420
 type Config struct {
-	Storage Storage `yaml:"storage"`
-	Service Service `yaml:"service"`
-	Public  Public  `yaml:"public"`
+	Storage  Storage  `yaml:"storage"`
+	Service  Service  `yaml:"service"`
+	Public   Public   `yaml:"public"`
+	Security Security `yaml:"security"`
+}
+
+// Security describe the certificates path
+type Security struct {
+	ServerCertPath string `yaml:"server_cert_path"`
+	ServerKeyPath  string `yaml:"server_key_path"`
 }
 
 // Storage define the config to storage system (default: minio)
@@ -43,6 +50,14 @@ func NewConfigFromFile(filePath string) (*Config, error) {
 	err = yaml.Unmarshal(data, c)
 	if err != nil {
 		return nil, err
+	}
+
+	if c.Security.ServerCertPath == "" {
+		c.Security.ServerCertPath = serverCertPath
+	}
+
+	if c.Security.ServerKeyPath == "" {
+		c.Security.ServerKeyPath = serverKeyPath
 	}
 
 	return c, nil
