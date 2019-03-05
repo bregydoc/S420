@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"google.golang.org/grpc/credentials"
 	"io/ioutil"
 
 	"github.com/k0kubun/pp"
@@ -11,7 +12,11 @@ import (
 )
 
 func main() {
-	conn, err := grpc.Dial("localhost:24000", grpc.WithInsecure())
+	creds, err := credentials.NewClientTLSFromFile("/Users/macbook/Documents/bombo/bombo-s420-server.crt", "")
+	if err != nil {
+		panic(err)
+	}
+	conn, err := grpc.Dial("resources.bombo.pe:24000", grpc.WithTransportCredentials(creds))
 	if err != nil {
 		panic(err)
 	}
@@ -29,7 +34,7 @@ func main() {
 		Options: &s420con.ObjectOptions{
 			ContentType: "application/python",
 		},
-		Path: "bombo/kite.py",
+		Path: "bombo/kite2.py",
 	})
 
 	if err != nil {
