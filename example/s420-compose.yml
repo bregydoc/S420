@@ -1,0 +1,21 @@
+version: "3.1"
+services:
+  s420:
+    image: bregymr/s420
+    ports:
+      - 3300:3300
+      - 24000:24000
+    volumes:
+      - ./s420.config.yml:/s420.config.yml
+    network_mode: host
+    secrets:
+      - server.crt
+      - server.key
+secrets:
+  server.crt:
+    file: ./server.crt
+  server.key:
+    file: ./server.key
+
+volumes:
+  data:
