@@ -8,7 +8,7 @@ import (
 	"log"
 	"strings"
 
-	"github.com/bregydoc/S420"
+	s420 "github.com/bregydoc/S420"
 	"github.com/minio/minio-go"
 	"github.com/sirupsen/logrus"
 )
@@ -133,4 +133,27 @@ func (m *MinioStorage) GetObject(path string) ([]byte, s420.ContentType, error) 
 	logrus.Println("filepath:", filePath)
 
 	return m.GetObjectFromBucket(bucket, filePath)
+}
+
+// ListObjectsOfBucket implement a s420 storage
+func (m *MinioStorage) ListObjectsOfBucket(bucket string, withThumbnails bool) ([]*s420.File, error) {
+	done := make(chan struct{})
+	info := m.client.ListObjectsV2(bucket, "", true, done)
+	// if withThumbnails {
+	// 	data, _, err := m.GetObjectFromBucket(bucket, o.Key)
+	// 	thumb ...
+	// }
+	files := make([]*s420.File, 0)
+	for o := range info {
+		files = append(files, &s420.File{
+			Name:      o.Key,
+			MD5:       o.ETag,
+			Size:      o.Size,
+			Type:      s420.ContentType(o.ContentType),
+			Thumbnail: []byte{},
+		})
+	}
+
+	<-done
+	return files, nil
 }

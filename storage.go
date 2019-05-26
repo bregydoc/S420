@@ -20,4 +20,5 @@ type StorageSystem interface {
 	GetObjectFromBucket(bucket string, path string) ([]byte, ContentType, error) // data, content-type, error
 	SaveNewObject(path string, data []byte, options *ObjectOptions) (*SaveResponse, error)
 	GetObject(path string) ([]byte, ContentType, error) // data, content-type, error
+	ListObjectsOfBucket(bucket string, withThumbnails bool) ([]*File, error)
 }
