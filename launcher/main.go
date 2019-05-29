@@ -3,9 +3,11 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/bregydoc/S420"
+
+	s420 "github.com/bregydoc/S420"
 	"github.com/bregydoc/S420/backends"
-	"github.com/bregydoc/S420/proto"
+	"github.com/bregydoc/S420/plugins/imods"
+	s420con "github.com/bregydoc/S420/proto"
 	"github.com/gin-gonic/gin"
 	"github.com/k0kubun/pp"
 	"github.com/sirupsen/logrus"
@@ -34,7 +36,9 @@ func main() {
 		panic(err)
 	}
 
-	h := s420.NewHumanClient(mStore, conf.Public, r)
+	im := imods.NewImagePlugin()
+
+	h := s420.NewHumanClient(mStore, conf.Public, r, im)
 
 	go func() { h.Run() }()
 
